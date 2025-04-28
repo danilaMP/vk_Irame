@@ -71,9 +71,9 @@
     var buildUrl = "Build";
     var loaderUrl = buildUrl + "/7a2dbded24d57e056180125b1583e7c4.loader.js";
     var config = {
-      dataUrl: buildUrl + "/8f72f40f9ae73b81ed03a038b5896772.data",
-      frameworkUrl: buildUrl + "/6cdab16a3570954176005f98bb5c20fe.framework.js",
-      codeUrl: buildUrl + "/339622f244c5b3063276dd8ce01f75b1.wasm",
+      dataUrl: buildUrl + "/49e43821d58119d734c380fd12018e5d.data",
+      frameworkUrl: buildUrl + "/afbc84d95b40136ed174dfed283e12cd.framework.js",
+      codeUrl: buildUrl + "/8f3d0eb40e32dfff91fb85a8079f2e66.wasm",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "vkTestPlugin",
@@ -104,6 +104,11 @@
           const bridge = vkBridge.default;
           bridge.subscribe((e) => console.log("vkBridge event", e));
           bridge.send("VKWebAppInit", {});
+          bridge.subscribe((e)=>{
+            if(e.detail.type =='VKWebAppInitResult' && e.detail.data.result == true){
+                ss.SendMessage('VkBridge', 'InitStatus', 'good');
+            }
+          })
       }
     initBridge();
       function showAd(adFormat, waterfall){
