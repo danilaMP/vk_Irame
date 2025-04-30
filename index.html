@@ -277,13 +277,13 @@
         bridge.send('VKWebAppHideBannerAd')
             .then((data) =>{
                 if(data.result){
-                    //banners deactivated
+                    ss.SendMessage('VkBridge', 'HideBannerAdResult', 'good');
                 }else{
-                    //banners not deactivated
+                    ss.SendMessage('VkBridge', 'HideBannerAdResult', 'noGood');
                 }
             })
             .catch((error)=>{
-                //banners not deactivated
+                ss.SendMessage('VkBridge', 'HideBannerAdResult', 'noGood');
             })
       }
 	  
