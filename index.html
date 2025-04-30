@@ -125,23 +125,7 @@
             "message": text
           });
         }
-        function showOrderBox() {
-            
-           const bridge = vkBridge.default;
-           bridge.send('VKWebAppShowOrderBox', { 
-            type: 'item',
-            item: 'item_id_123456'
-                })
-                .then((data) => {
-                if (data.success) {
-    
-                }})
-                .catch((error) => {
-    
-                 console.log(error);
-                });
-
-            }
+        
       function storageSet(key, value) {
         const bridge = vkBridge.default;
         bridge.send("VKWebAppStorageSet", {"key": key, "value": value});
@@ -244,6 +228,27 @@
 			ss.SendMessage('VkBridge', 'SendResult', JSON.stringify(error));
 		});;
 	  }
+
+
+      // added by MadPixel
+
+      function showOrderBox(a_item) {
+            
+           const bridge = vkBridge.default;
+           bridge.send('VKWebAppShowOrderBox', { 
+            type: 'item',
+            item: a_item
+                })
+                .then((data) => {
+                if (data.success) {
+    
+                }})
+                .catch((error) => {
+    
+                 console.log(error);
+                });
+
+            }
 	  
   </script>
 </body>
