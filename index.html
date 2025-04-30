@@ -320,13 +320,13 @@ function GetUserPlatform(){
     bridge.send('VKWebAppGetClientVersion')
         .then((data)=>{
             if(data.platform){
-                ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', data.platform);
+                ss.SendMessage('VkBridge', 'GetUserPlatformResult', data.platform);
             }else{
-                ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', 'unknown');
+                ss.SendMessage('VkBridge', 'GetUserPlatformResult', 'unknown');
             }
         })
         .catch(()=>{
-            ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', 'error');
+            ss.SendMessage('VkBridge', 'GetUserPlatformResult', 'error');
         })
 }
 
