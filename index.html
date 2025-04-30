@@ -273,7 +273,7 @@
       }
 
       function hideBannerAd(){
-        const bridge = VkBridge.default;
+        const bridge = vkBridge.default;
         bridge.send('VKWebAppHideBannerAd')
             .then((data) =>{
                 if(data.result){
