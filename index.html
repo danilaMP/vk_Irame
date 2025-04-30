@@ -71,9 +71,9 @@
     var buildUrl = "Build";
     var loaderUrl = buildUrl + "/7a2dbded24d57e056180125b1583e7c4.loader.js";
     var config = {
-      dataUrl: buildUrl + "/37306b2c85ac43bbc958b488532af66b.data",
-      frameworkUrl: buildUrl + "/fab4cf706a08e36e092d415106864b2d.framework.js",
-      codeUrl: buildUrl + "/a5c35264831888d7df27824b9f92a52a.wasm",
+      dataUrl: buildUrl + "/9a0ed369bf9f4a465c44aa94e09d3896.data",
+      frameworkUrl: buildUrl + "/519b85c4e3ddb4b23ae9ba57139a76e5.framework.js",
+      codeUrl: buildUrl + "/7b534777df79119dbb6f5b9488b46ac0.wasm",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "vkTestPlugin",
@@ -100,11 +100,17 @@
     };
     document.body.appendChild(script);
 	
-    function initBridge() {
-          const bridge = vkBridge.default;
-          bridge.subscribe((e) => console.log("vkBridge event", e));
-          bridge.send("VKWebAppInit", {});
-      }
+    function initBridge(){
+        const bridge = vkBridge.default;
+        bridge.send('VKWebAppInit')
+            .then((data)=>{
+                 ss.SendMessage('VkBridge', 'InitBridgeResult', data.result);
+            })
+            .catch((error)=>{
+                console.log(error);
+                ss.SendMessage('VkBridge', 'InitBridgeResult', false);
+            });
+    }
     initBridge();
       function showAd(adFormat, waterfall){
 
@@ -157,40 +163,7 @@
         .catch(error => console.log(error));
        
       }
-	  function ShowSubscriptionBox(action, item, subscription_id){
-		const bridge = vkBridge.default;
-	
-		if(subscription_id == null || subscription_id == ""){
-			bridge.send("VKWebAppShowSubscriptionBox",  {
-				"action": action,
-				"item": item
-			});
-			bridge.subscribe((e) => {
-			if(e.detail.type == 'VKWebAppShowSubscriptionBoxResult') {
-				ss.SendMessage('VkBridge', 'SubscriptionBoxResult', e.detail.data.success);
-			}
-			if(e.detail.type == 'VKWebAppShowSubscriptionBoxFailed') {
-				ss.SendMessage('VkBridge', 'SubscriptionBoxResult', 'error');
-			}
-        });
-		}
-		if(subscription_id != null && subscription_id != ""){
-			bridge.send("VKWebAppShowSubscriptionBox",  {
-				"action": action,
-				"subscription_id": subscription_id
-			});
-			bridge.subscribe((e) => {
-			if(e.detail.type == 'VKWebAppShowSubscriptionBoxResult') {
-				ss.SendMessage('VkBridge', 'SubscriptionBoxResult', e.detail.data.success);
-			}
-			if(e.detail.type == 'VKWebAppShowSubscriptionBoxFailed') {
-				ss.SendMessage('VkBridge', 'SubscriptionBoxResult', 'error');
-			}
-        });
-        
-		}
-		
-	  }
+	  
 	  function AccelerometerStart(refresh_rate){
         const bridge = vkBridge.default;
         bridge.send("VKWebAppAccelerometerStart", {"refresh_rate": refresh_rate});
@@ -299,8 +272,44 @@
                 ss.SendMessage('VkBridge', 'CheckNativeAdsResult', 'noGood');
             }
         })
-        .catch((error)=>{console.log(error);})
+        .catch((error)=>{console.log(error);});
       }
+
+      function ShowSubscriptionBox(a_action, a_item, a_subscription_id) {
+    const bridge = vkBridge.default;
+
+    if (a_subscription_id == null || a_subscription_id == "") {
+        bridge.send("VKWebAppShowSubscriptionBox", {
+            action: a_action,
+            item: a_item
+        })
+        .then((data) => {
+            if (data.success) {
+                ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', 'good');
+            } else {
+                ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', 'noGood');
+            }
+        })
+        .catch((error) => {
+            ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', 'noGood');
+        });
+    } else {
+        bridge.send("VKWebAppShowSubscriptionBox", {
+            action: a_action,
+            subscription_id: a_subscription_id
+        })
+        .then((data) => {
+            if (data.success) {
+                ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', 'good', a_subscription_id);
+            } else {
+                ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', 'noGood', a_subscription_id);
+            }
+        })
+        .catch((error) => {
+            ss.SendMessage('VkBridge', 'ShowSubscriptionBoxResult', 'noGood', a_subscription_id);
+        });
+    }
+}
 
   </script>
 </body>
