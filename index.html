@@ -71,9 +71,9 @@
     var buildUrl = "Build";
     var loaderUrl = buildUrl + "/7a2dbded24d57e056180125b1583e7c4.loader.js";
     var config = {
-      dataUrl: buildUrl + "/a5847d55fe2b9163d379954a82af499c.data",
-      frameworkUrl: buildUrl + "/7885c6687a90b1c60d8c90948b6c8f5f.framework.js",
-      codeUrl: buildUrl + "/6ff0a74a4b94026524b17cb687b724a0.wasm",
+      dataUrl: buildUrl + "/c29bb851332435d84a7e855aafd00088.data",
+      frameworkUrl: buildUrl + "/fab4cf706a08e36e092d415106864b2d.framework.js",
+      codeUrl: buildUrl + "/a5c35264831888d7df27824b9f92a52a.wasm",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "vkTestPlugin",
@@ -287,6 +287,21 @@
             });
       }
 	  
+      function checkNativeAds(a_ad_format){
+        const bridge = vkBridge.default;
+        bridge.send('VKWebAppCheckNativeAds', {
+        ad_format: a_ad_format
+        })
+        .then((data)=>{
+            if(data.result){
+                ss.SendMessage('VkBridge', 'CheckNativeAdsResult', 'good');
+            }else{
+                ss.SendMessage('VkBridge', 'CheckNativeAdsResult', 'noGood');
+            }
+        })
+        .catch((error)=>{console.log(error);})
+      }
+
   </script>
 </body>
 
